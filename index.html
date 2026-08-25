@@ -3,44 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Hello World — @f6qa</title>
-  
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- Canvas for subtle click sparkles -->
   <canvas id="sparkle-canvas"></canvas>
-
-  <!-- Background Gradients -->
   <div class="bg-gradient-mesh" aria-hidden="true"></div>
   <div class="bg-noise" aria-hidden="true"></div>
 
   <main class="center-container">
     
     <div class="bounce-wrapper" id="bounce-box" title="Cliquez pour faire rebondir !">
-      
-      <!-- Top Tag -->
       <div class="minimal-pill">
         <span class="status-dot"></span>
         <span>f6qa.cloud</span>
       </div>
 
-      <!-- Main Animated Bouncing Text -->
       <h1 class="gradient-headline">
         Hello world from <span class="highlight-text">f6qa!</span>
       </h1>
 
-      <!-- Shadow that reacts to the bounce -->
       <div class="bounce-shadow"></div>
     </div>
 
-    <!-- Minimalist Subtext / Footer -->
     <footer class="minimal-footer">
       <span class="mono-badge">Building the future</span>
       <div class="social-links">
@@ -52,9 +44,7 @@
 
   </main>
 
-  <!-- Toast Notification Container -->
   <div class="toast-box" id="toast">Copié !</div>
-
   <script src="app.js"></script>
 </body>
 </html>

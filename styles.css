@@ -1,18 +1,9 @@
-/* ==========================================================================
-   @f6qa — Minimalist Monochrome Bouncing Design (iOS & Mobile Optimized)
-   Clean Black & White Gradient Aesthetics
-   ========================================================================== */
-
 :root {
   --bg-deep: #000000;
-  --bg-subtle: #09090b;
   --text-white: #ffffff;
-  --text-dim: #a1a1aa;
-  --text-muted: #52525b;
-  
-  --grad-text: linear-gradient(180deg, #FFFFFF 0%, #E4E4E7 40%, #71717A 100%);
-  --grad-highlight: linear-gradient(135deg, #FFFFFF 0%, #D4D4D8 40%, #71717A 100%);
-  --grad-radial: radial-gradient(circle at 50% 35%, #18181b 0%, #09090b 60%, #000000 100%);
+  --text-bright: #f4f4f5;
+  --text-dim: #d4d4d8;
+  --text-muted: #71717a;
   
   --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -44,26 +35,110 @@ body {
   position: relative;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  padding: env(safe-area-inset-top, 20px) env(safe-area-inset-right, 20px) env(safe-area-inset-bottom, 20px) env(safe-area-inset-left, 20px);
 }
 
-/* Background Gradients & Noise Mesh */
 .bg-gradient-mesh {
   position: fixed;
   inset: 0;
-  background: var(--grad-radial);
   z-index: 0;
   pointer-events: none;
+  overflow: hidden;
+  background: #000000;
+}
+
+.bg-gradient-mesh::before {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 20%;
+  width: 50vw;
+  height: 50vw;
+  max-width: 600px;
+  max-height: 600px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, rgba(140, 140, 160, 0.05) 45%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(60px);
+  -webkit-filter: blur(60px);
+  animation: floatOrb1 12s ease-in-out infinite alternate;
+  -webkit-animation: floatOrb1 12s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.bg-gradient-mesh::after {
+  content: '';
+  position: absolute;
+  bottom: 10%;
+  right: 20%;
+  width: 55vw;
+  height: 55vw;
+  max-width: 650px;
+  max-height: 650px;
+  background: radial-gradient(circle, rgba(220, 220, 255, 0.08) 0%, rgba(100, 100, 120, 0.03) 50%, transparent 75%);
+  border-radius: 50%;
+  filter: blur(70px);
+  -webkit-filter: blur(70px);
+  animation: floatOrb2 16s ease-in-out infinite alternate;
+  -webkit-animation: floatOrb2 16s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes floatOrb1 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(8vw, 10vh, 0) scale(1.15);
+  }
+  100% {
+    transform: translate3d(-6vw, 15vh, 0) scale(0.95);
+  }
+}
+
+@-webkit-keyframes floatOrb1 {
+  0% {
+    -webkit-transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    -webkit-transform: translate3d(8vw, 10vh, 0) scale(1.15);
+  }
+  100% {
+    -webkit-transform: translate3d(-6vw, 15vh, 0) scale(0.95);
+  }
+}
+
+@keyframes floatOrb2 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-10vw, -12vh, 0) scale(1.2);
+  }
+  100% {
+    transform: translate3d(7vw, -6vh, 0) scale(0.9);
+  }
+}
+
+@-webkit-keyframes floatOrb2 {
+  0% {
+    -webkit-transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    -webkit-transform: translate3d(-10vw, -12vh, 0) scale(1.2);
+  }
+  100% {
+    -webkit-transform: translate3d(7vw, -6vh, 0) scale(0.9);
+  }
 }
 
 .bg-noise {
   position: fixed;
   inset: 0;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
   background-size: 24px 24px;
   mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 85%);
   -webkit-mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 85%);
-  opacity: 0.7;
+  opacity: 0.6;
   pointer-events: none;
   z-index: 1;
 }
@@ -75,7 +150,6 @@ body {
   z-index: 999;
 }
 
-/* Main Centered Container */
 .center-container {
   position: relative;
   z-index: 2;
@@ -86,13 +160,10 @@ body {
   text-align: center;
   padding: 1.5rem;
   width: 100%;
-  max-width: 900px;
+  max-width: 850px;
   margin: auto;
 }
 
-/* ==========================================================================
-   Bouncing Wrapper & Animation Physics (iOS GPU Accelerated)
-   ========================================================================== */
 .bounce-wrapper {
   display: flex;
   flex-direction: column;
@@ -103,10 +174,10 @@ body {
   transform: translate3d(0, 0, 0);
   -webkit-transform: translate3d(0, 0, 0);
   will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
   position: relative;
   touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 @keyframes bounceAnim {
@@ -114,10 +185,10 @@ body {
     transform: translate3d(0, 0, 0);
   }
   40% {
-    transform: translate3d(0, -38px, 0);
+    transform: translate3d(0, -36px, 0);
   }
   50% {
-    transform: translate3d(0, -42px, 0);
+    transform: translate3d(0, -40px, 0);
   }
   65% {
     transform: translate3d(0, 0, 0);
@@ -141,10 +212,10 @@ body {
     -webkit-transform: translate3d(0, 0, 0);
   }
   40% {
-    -webkit-transform: translate3d(0, -38px, 0);
+    -webkit-transform: translate3d(0, -36px, 0);
   }
   50% {
-    -webkit-transform: translate3d(0, -42px, 0);
+    -webkit-transform: translate3d(0, -40px, 0);
   }
   65% {
     -webkit-transform: translate3d(0, 0, 0);
@@ -163,13 +234,12 @@ body {
   }
 }
 
-/* Floor Shadow reacting to the bounce */
 .bounce-shadow {
-  width: 180px;
+  width: 170px;
   height: 14px;
-  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.03) 50%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
   border-radius: 50%;
-  margin-top: 1.25rem;
+  margin-top: 1.5rem;
   animation: shadowAnim 2.2s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
   -webkit-animation: shadowAnim 2.2s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
   filter: blur(4px);
@@ -182,102 +252,148 @@ body {
 @keyframes shadowAnim {
   0%, 65%, 85%, 100% {
     transform: scale(1);
-    opacity: 0.9;
+    opacity: 0.95;
   }
   40%, 50% {
-    transform: scale(0.6);
+    transform: scale(0.55);
     opacity: 0.25;
   }
   75% {
     transform: scale(0.85);
-    opacity: 0.6;
+    opacity: 0.65;
   }
 }
 
 @-webkit-keyframes shadowAnim {
   0%, 65%, 85%, 100% {
     -webkit-transform: scale(1);
-    opacity: 0.9;
+    opacity: 0.95;
   }
   40%, 50% {
-    -webkit-transform: scale(0.6);
+    -webkit-transform: scale(0.55);
     opacity: 0.25;
   }
   75% {
     -webkit-transform: scale(0.85);
-    opacity: 0.6;
+    opacity: 0.65;
   }
 }
 
-/* Top Pill Badge */
 .minimal-pill {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.35rem 0.85rem;
+  padding: 0.4rem 0.95rem;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-dim);
-  margin-bottom: 1.25rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-bright);
+  margin-bottom: 1.5rem;
   letter-spacing: 0.05em;
-  transition: all 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  transition: all 0.25s ease;
 }
 
 .status-dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: #ffffff;
-  box-shadow: 0 0 8px #ffffff;
+  box-shadow: 0 0 10px #ffffff;
+  animation: pulseDot 2.5s ease-in-out infinite;
 }
 
-/* Headline with Fix for Safari / iOS WebKit Text Gradient */
+@keyframes pulseDot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 10px #ffffff;
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.85);
+    box-shadow: 0 0 4px #ffffff;
+  }
+}
+
 .gradient-headline {
-  font-size: clamp(2rem, 8vw, 4.5rem);
+  font-size: clamp(2.4rem, 9.5vw, 4.6rem);
   font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-  background: var(--grad-text);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: #ffffff; /* Safari fallback */
+  line-height: 1.12;
+  letter-spacing: -0.035em;
   max-width: 100%;
   word-break: break-word;
   padding: 0 0.5rem;
-}
-
-.highlight-text {
-  display: inline-block;
-  background: var(--grad-highlight);
+  
+  background: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    #ffffff 20%,
+    #a1a1aa 45%,
+    #ffffff 55%,
+    #ffffff 80%,
+    #a1a1aa 95%,
+    #ffffff 100%
+  );
+  background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: #ffffff;
-  text-decoration: underline;
-  text-decoration-color: rgba(255, 255, 255, 0.3);
-  text-underline-offset: 6px;
+  
+  animation: shimmerFlow 5s linear infinite;
+  -webkit-animation: shimmerFlow 5s linear infinite;
+  filter: drop-shadow(0 2px 20px rgba(255, 255, 255, 0.2));
 }
 
-/* Footer Section */
+@keyframes shimmerFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@-webkit-keyframes shimmerFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.highlight-text {
+  display: inline-block;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.6);
+  text-underline-offset: 8px;
+  text-shadow: 0 0 35px rgba(255, 255, 255, 0.5);
+  position: relative;
+}
+
 .minimal-footer {
-  margin-top: 2.5rem;
+  margin-top: 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.85rem;
 }
 
 .mono-badge {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.18em;
   color: var(--text-muted);
 }
 
@@ -286,42 +402,44 @@ body {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  font-size: 0.85rem;
+  gap: 0.85rem;
+  font-size: 0.95rem;
   color: var(--text-dim);
 }
 
 .social-item {
   color: var(--text-dim);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: all 0.2s ease;
   cursor: pointer;
-  padding: 0.3rem 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
 }
 
-.social-item:active, .social-item:hover {
+.social-item:hover, .social-item:active {
   color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .divider {
   color: var(--text-muted);
+  user-select: none;
 }
 
-/* Minimal Toast */
 .toast-box {
   position: fixed;
-  bottom: 2rem;
+  bottom: 2.5rem;
   left: 50%;
   transform: translate3d(-50%, 20px, 0);
   -webkit-transform: translate3d(-50%, 20px, 0);
   background: #ffffff;
   color: #000000;
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  padding: 0.5rem 1.2rem;
+  padding: 0.6rem 1.4rem;
   border-radius: 9999px;
-  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 35px rgba(255, 255, 255, 0.25);
   opacity: 0;
   pointer-events: none;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -335,15 +453,24 @@ body {
   -webkit-transform: translate3d(-50%, 0, 0);
 }
 
-/* Mobile specific tweaks */
 @media (max-width: 480px) {
   .center-container {
-    padding: 1rem;
+    padding: 1.25rem 1rem;
   }
   .gradient-headline {
-    font-size: 2.25rem;
+    font-size: clamp(2.2rem, 11vw, 3rem);
+    letter-spacing: -0.03em;
   }
   .bounce-shadow {
     width: 140px;
+    margin-top: 1.25rem;
+  }
+  .minimal-pill {
+    padding: 0.35rem 0.85rem;
+    font-size: 0.78rem;
+    margin-bottom: 1.25rem;
+  }
+  .minimal-footer {
+    margin-top: 2.5rem;
   }
 }

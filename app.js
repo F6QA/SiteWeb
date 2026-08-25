@@ -1,14 +1,9 @@
-/**
- * @f6qa — Hello World Minimalist Interactivity (iOS & Mobile Touch Optimized)
- */
-
 document.addEventListener('DOMContentLoaded', () => {
   const bounceBox = document.getElementById('bounce-box');
   const toast = document.getElementById('toast');
   const canvas = document.getElementById('sparkle-canvas');
   let ctx = canvas ? canvas.getContext('2d') : null;
 
-  // Setup Canvas with Retina / High-DPI Support
   let particles = [];
   function resize() {
     if (!canvas) return;
@@ -18,17 +13,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (ctx) ctx.scale(dpr, dpr);
   }
   window.addEventListener('resize', resize);
+  window.addEventListener('orientationchange', () => setTimeout(resize, 100));
   resize();
 
-  // Click & Touch bounce reaction
   if (bounceBox) {
     const triggerAction = (e) => {
-      const clientX = e.touches ? e.touches[0].clientX : (e.clientX || window.innerWidth / 2);
-      const clientY = e.touches ? e.touches[0].clientY : (e.clientY || window.innerHeight / 2);
+      const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : window.innerWidth / 2);
+      const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : window.innerHeight / 2);
       
       triggerSparkles(clientX, clientY);
       bounceBox.style.animation = 'none';
-      void bounceBox.offsetWidth; // Trigger reflow
+      void bounceBox.offsetWidth;
       bounceBox.style.animation = 'bounceAnim 1.2s cubic-bezier(0.28, 0.84, 0.42, 1)';
       setTimeout(() => {
         bounceBox.style.animation = 'bounceAnim 2.2s cubic-bezier(0.28, 0.84, 0.42, 1) infinite';
@@ -38,25 +33,25 @@ document.addEventListener('DOMContentLoaded', () => {
     bounceBox.addEventListener('pointerdown', triggerAction);
   }
 
-  // Copy to clipboard handlers (Supports iOS Safari)
   document.querySelectorAll('[data-copy]').forEach((el) => {
     el.addEventListener('click', (e) => {
       e.preventDefault();
+      e.stopPropagation();
       const text = el.getAttribute('data-copy');
       if (text) {
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(text).then(() => {
             showToast(`Copié : ${text}`);
             triggerSparkles(e.clientX || window.innerWidth / 2, e.clientY || window.innerHeight / 2);
-          }).catch(() => fallbackCopy(text));
+          }).catch(() => fallbackCopy(text, e));
         } else {
-          fallbackCopy(text);
+          fallbackCopy(text, e);
         }
       }
     });
   });
 
-  function fallbackCopy(text) {
+  function fallbackCopy(text, e) {
     const textArea = document.createElement('textarea');
     textArea.value = text;
     textArea.style.position = 'fixed';
@@ -68,33 +63,36 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       document.execCommand('copy');
       showToast(`Copié : ${text}`);
+      if (e) triggerSparkles(e.clientX || window.innerWidth / 2, e.clientY || window.innerHeight / 2);
     } catch (err) {
       showToast(text);
     }
     document.body.removeChild(textArea);
   }
 
+  let toastTimer = null;
   function showToast(msg) {
     if (!toast) return;
     toast.textContent = msg;
     toast.classList.add('show');
-    setTimeout(() => {
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
       toast.classList.remove('show');
-    }, 2000);
+    }, 2200);
   }
 
   function triggerSparkles(x, y) {
     if (!ctx) return;
-    const colors = ['#ffffff', '#f4f4f5', '#d4d4d8', '#a1a1aa'];
-    for (let i = 0; i < 20; i++) {
+    const colors = ['#ffffff', '#f4f4f5', '#e4e4e7', '#d4d4d8'];
+    for (let i = 0; i < 18; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const speed = Math.random() * 5 + 2;
+      const speed = Math.random() * 4.5 + 2;
       particles.push({
         x: x,
         y: y,
         vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - 1.2,
-        size: Math.random() * 3.5 + 1.5,
+        vy: Math.sin(angle) * speed - 1,
+        size: Math.random() * 3 + 1.5,
         color: colors[Math.floor(Math.random() * colors.length)],
         alpha: 1,
         decay: Math.random() * 0.03 + 0.02
@@ -112,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const p = particles[i];
       p.x += p.vx;
       p.y += p.vy;
-      p.vy += 0.15; // gravity
+      p.vy += 0.15;
       p.alpha -= p.decay;
 
       if (p.alpha <= 0) {
